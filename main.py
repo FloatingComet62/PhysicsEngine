@@ -23,6 +23,10 @@ if __name__ == "__main__":
         player = Rectangle(mouseX - 50, mouseY - 50, 100, 100, (15, 15, 15))
         static = Rectangle(300, 300, 100, 100, (20, 20, 20))
 
+        if player.isTouching(static):
+            static.color = (255, 0, 0)
+        else:
+            static.color = (20, 20, 20)
 
         static.display()
         player.display()
