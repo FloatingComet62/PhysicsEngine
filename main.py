@@ -1,34 +1,38 @@
-from pygame import init, display, transform, quit, event, time, mouse, QUIT
+from pygame import init, display, quit, event, time, mouse, QUIT
 from entities import Rectangle
+from consts import FPS, HEIGHT, RUNNING, SCREEN_COLOR, WIDTH
 
 
 init()
-WIDTH = 800
-HEIGHT = 600
-SCREEN_COLOR = (90, 150, 70)
-FPS = 60
-RUNNING = True
 screen = display.set_mode((WIDTH, HEIGHT))
 display.set_caption("Physics Engine")
 clock = time.Clock()
-transform.rotate(screen, 45)
+
+player = Rectangle(0, 0, 100, 100, (15, 15, 15))
+static = Rectangle(200, 200, 100, 100, (20, 20, 20))
 
 while RUNNING:
+    # display
     display.update()
     screen.fill(SCREEN_COLOR)
     clock.tick(FPS)
 
+    # mouse stick
     (mouseX, mouseY) = mouse.get_pos()
-    player = Rectangle(screen, mouseX - 50, mouseY - 50, 100, 100, (15, 15, 15))
-    static = Rectangle(screen, 300, 300, 100, 100, (20, 20, 20))
+    player.x = mouseX - 50
+    player.y = mouseY - 50
 
+    # touch
     if player.isTouching(static):
         static.color = (255, 0, 0)
     else:
         static.color = (20, 20, 20)
 
-    static.display()
-    player.display()
+    # display sprites
+    static.display(24)
+    player.display(56)
+
+    # events
     for e in event.get():
         if e.type == QUIT:
             quit()
