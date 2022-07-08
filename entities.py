@@ -1,15 +1,11 @@
-from pygame import Surface, draw, SRCALPHA, transform, display
-from consts import HEIGHT, WIDTH
+from pygame import Surface, transform
+from consts import screen
 
 
 class BaseEntity:
     def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
-        screen = display.set_mode((800, 600))
-        screen_rect = screen.get_rect()  # A rect with the size of the screen.
-        surface = Surface((50, 50), SRCALPHA)
-        self.screen = Surface([WIDTH, HEIGHT], SRCALPHA, 32)
 
 
 class Rectangle(BaseEntity):
@@ -20,11 +16,29 @@ class Rectangle(BaseEntity):
         self.color = color
         self.rotatation = 0
 
+        # the rectangle is a surface itself
+        self.surface = Surface((width, height))
+        self.surface.set_colorkey((0, 0, 0))
+        self.surface.fill(color)
+        self.rect = self.surface.get_rect()
+
     def display(self, angle=None):
+        # updating values
+        self.surface.fill(
+            self.color
+        )  # refill the surface color if you change it somewhere in the program
+        self.rect = self.surface.get_rect()
+        self.rect.center = (self.x, self.y)
+
+        # renderer
         if angle is not None:
             self.rotatation = angle
-        transform.rotate(self.screen, self.rotatation)
-        draw.rect(self.screen, self.color, (self.x, self.y, self.width, self.height))
+
+        old_center = self.rect.center
+        new = transform.rotate(self.surface, self.rotatation)
+        self.rect = new.get_rect()
+        self.rect.center = old_center
+        screen.blit(new, self.rect)
 
     def isTouching(self, other):
         return (
