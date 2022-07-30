@@ -14,7 +14,7 @@ class Rectangle(BaseEntity):
         self.width = width
         self.height = height
         self.color = color
-        self.rotatation = 0
+        self.rotation = 0
 
         # the rectangle is a surface itself
         self.surface = Surface((width, height))
@@ -32,10 +32,10 @@ class Rectangle(BaseEntity):
 
         # renderer
         if angle is not None:
-            self.rotatation = angle
+            self.rotation = angle
 
         old_center = self.rect.center
-        new = transform.rotate(self.surface, self.rotatation)
+        new = transform.rotate(self.surface, self.rotation)
         self.rect = new.get_rect()
         self.rect.center = old_center
         screen.blit(new, self.rect)
